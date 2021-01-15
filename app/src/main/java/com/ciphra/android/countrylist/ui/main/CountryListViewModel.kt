@@ -2,6 +2,6 @@ package com.ciphra.android.countrylist.ui.main
 
 import androidx.lifecycle.ViewModel
 
-class MainViewModel : ViewModel() {
+class CountryListViewModel : ViewModel() {
     // TODO: Implement the ViewModel
 }
