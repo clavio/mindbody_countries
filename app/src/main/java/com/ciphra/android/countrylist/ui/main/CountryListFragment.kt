@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.ciphra.android.countrylist.Models.Country
 import com.ciphra.android.countrylist.ViewModels.CountryListViewModel
 import com.ciphra.android.countrylist.databinding.CountryListFragmentBinding
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class CountryListFragment : Fragment() {
 
@@ -18,7 +19,7 @@ class CountryListFragment : Fragment() {
         fun newInstance() = CountryListFragment()
     }
 
-    private lateinit var viewModel: CountryListViewModel
+    val viewModel: CountryListViewModel by viewModel()
     private lateinit var binding : CountryListFragmentBinding
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -29,7 +30,6 @@ class CountryListFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(CountryListViewModel::class.java)
         val countryListObserver = Observer<MutableList<Country>>{
             if(it.isNotEmpty()) {
                 //TODO remove errors
