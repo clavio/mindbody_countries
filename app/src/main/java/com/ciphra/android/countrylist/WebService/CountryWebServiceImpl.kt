@@ -8,7 +8,7 @@ import okhttp3.Request
 import java.lang.Exception
 
 class CountryWebServiceImpl : CountryWebService {
-    override fun getCountryList() : MutableList<Country> {
+    override suspend fun getCountryList() : MutableList<Country> {
         var returnList = mutableListOf<Country>()
         val gson = Gson()
         val client = OkHttpClient()
@@ -17,7 +17,7 @@ class CountryWebServiceImpl : CountryWebService {
             .build()
         try{
             val response = client.newCall(request).execute()
-            val body = response.body.toString()
+            val body = response.body!!.string()
             val itemType = object : TypeToken<MutableList<Country>>() {}.type
             returnList = gson.fromJson<MutableList<Country>>(body, itemType)
         }

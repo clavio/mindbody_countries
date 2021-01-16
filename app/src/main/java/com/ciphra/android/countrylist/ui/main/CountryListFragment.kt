@@ -42,6 +42,7 @@ class CountryListFragment : Fragment() {
             //TODO remove List
             //TODO show errors
         }
+        viewModel.retrieveCountryList()
     }
 
     private fun setupRecyclerView(it: MutableList<Country>) {
