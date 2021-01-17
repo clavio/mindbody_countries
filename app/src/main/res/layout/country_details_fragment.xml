@@ -3,14 +3,14 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/country_frame"
+    android:id="@+id/province_frame"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_gravity="center"
     tools:context=".ui.main.CountryListFragment">
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/country_list_recyclerview"
+        android:id="@+id/province_list_recyclerview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:visibility="gone"

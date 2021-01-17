@@ -1,14 +1,15 @@
 package com.ciphra.android.countrylist.ui.main
 
-import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ciphra.android.countrylist.Models.Country
+import com.ciphra.android.countrylist.R
 import com.ciphra.android.countrylist.ViewModels.CountryListViewModel
 import com.ciphra.android.countrylist.databinding.CountryListFragmentBinding
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -46,11 +47,18 @@ class CountryListFragment : Fragment() {
     }
 
     private fun setupRecyclerView(it: MutableList<Country>) {
-        val adapter = CountryListAdapter(it)
+        val adapter = CountryListAdapter(it, navigateToProvinces)
         binding.countryListRecyclerview.layoutManager = LinearLayoutManager(context)
         binding.countryListRecyclerview.adapter = adapter
         binding.progressBar.visibility = View.GONE
         binding.countryListRecyclerview.visibility = View.VISIBLE
+    }
+
+    val navigateToProvinces = {
+        id : Int ->
+        var bundle = Bundle()
+        bundle.putInt("Id", id)
+        requireView().findNavController().navigate(R.id.action_countryListFragment_to_countryDetailsFragment, bundle)
     }
 
 }
