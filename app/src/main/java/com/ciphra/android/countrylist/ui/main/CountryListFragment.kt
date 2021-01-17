@@ -54,7 +54,7 @@ class CountryListFragment : Fragment() {
         binding.countryListRecyclerview.visibility = View.VISIBLE
     }
 
-    val navigateToProvinces = {
+    private val navigateToProvinces = {
         id : Int ->
         var bundle = Bundle()
         bundle.putInt("Id", id)

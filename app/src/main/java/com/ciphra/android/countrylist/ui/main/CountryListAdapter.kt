@@ -6,16 +6,17 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
-import com.ciphra.android.countrylist.Models.Country
+import com.ciphra.android.countrylist.Models.Place
 import com.ciphra.android.countrylist.R
-import kotlinx.coroutines.withContext
 import org.apache.commons.lang3.text.WordUtils
 
-class CountryListAdapter(private val dataSet : List<Country>, val rowClicked : (Int) -> (Unit)) : RecyclerView.Adapter<CountryListAdapter.ViewHolder>() {
+class CountryListAdapter(private val dataSet : List<Place>, val rowClicked : ((Int) -> (Unit))?) : RecyclerView.Adapter<CountryListAdapter.ViewHolder>() {
+    //I decided to make one adapter for both screens because the lists are so similar
+    //the row clicked is nullable, if it is null onclick does nothing
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
-    ): CountryListAdapter.ViewHolder {
+    ): ViewHolder {
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.country_cell, parent, false)
 
@@ -26,11 +27,11 @@ class CountryListAdapter(private val dataSet : List<Country>, val rowClicked : (
         return dataSet.size
     }
 
-    override fun onBindViewHolder(holder: CountryListAdapter.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val countryLabel = WordUtils.capitalizeFully(dataSet[position].Name)
         holder.labelTextView.setText(countryLabel)
-        holder.rowLayout.setOnClickListener {
-            rowClicked(dataSet[position].ID.toInt())
+        if(rowClicked != null)holder.rowLayout.setOnClickListener {
+            rowClicked!!(dataSet[position].ID.toInt())
         }
     }
 

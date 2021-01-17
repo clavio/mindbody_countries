@@ -6,8 +6,15 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.ciphra.android.countrylist.Models.Country
+import com.ciphra.android.countrylist.Models.Province
 import com.ciphra.android.countrylist.R
-import com.ciphra.android.countrylist.ViewModels.CountryDetailsViewModel
+import com.ciphra.android.countrylist.ViewModels.CountryListViewModel
+import com.ciphra.android.countrylist.databinding.CountryDetailsFragmentBinding
+import com.ciphra.android.countrylist.databinding.CountryListFragmentBinding
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class CountryDetailsFragment : Fragment() {
 
@@ -15,21 +22,36 @@ class CountryDetailsFragment : Fragment() {
         fun newInstance() = CountryDetailsFragment()
     }
 
-    private lateinit var viewModel: CountryDetailsViewModel
+
+    val viewModel: CountryListViewModel by viewModel()
+    private lateinit var binding : CountryDetailsFragmentBinding
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.country_details_fragment, container, false)
-    }
+        binding = CountryDetailsFragmentBinding.inflate(layoutInflater)
+        return binding.root    }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        val bundle = arguments
-        val id = arguments?.get("Id")
-        viewModel = ViewModelProvider(this).get(CountryDetailsViewModel::class.java)
-
+        val id = arguments?.get("Id") as Int
+        val provinceListObserver = Observer<MutableList<Province>>{
+            if(it.isNotEmpty()) {
+                setupRecyclerView(it)
+            }
+        }
+        viewModel.provinceLiveData.observe(this, provinceListObserver)
+        viewModel.retrieveProvinceList(id)
     }
+
+    private fun setupRecyclerView(it: MutableList<Province>) {
+        val adapter = CountryListAdapter(it, null)
+        binding.provinceListRecyclerview.layoutManager = LinearLayoutManager(context)
+        binding.provinceListRecyclerview.adapter = adapter
+        binding.progressBar.visibility = View.GONE
+        binding.provinceListRecyclerview.visibility = View.VISIBLE
+    }
+
 
 }
