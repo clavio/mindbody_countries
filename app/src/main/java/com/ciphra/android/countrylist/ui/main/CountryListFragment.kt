@@ -47,7 +47,7 @@ class CountryListFragment : Fragment() {
     }
 
     private fun setupRecyclerView(it: MutableList<Country>) {
-        val adapter = CountryListAdapter(it, navigateToProvinces)
+        val adapter = CountryListAdapter(dataSet = it, rowClicked = navigateToProvinces, showFlags = true)
         binding.countryListRecyclerview.layoutManager = LinearLayoutManager(context)
         binding.countryListRecyclerview.adapter = adapter
         binding.progressBar.visibility = View.GONE

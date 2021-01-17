@@ -22,7 +22,6 @@ class CountryDetailsFragment : Fragment() {
         fun newInstance() = CountryDetailsFragment()
     }
 
-
     val viewModel: CountryListViewModel by viewModel()
     private lateinit var binding : CountryDetailsFragmentBinding
 
@@ -46,12 +45,10 @@ class CountryDetailsFragment : Fragment() {
     }
 
     private fun setupRecyclerView(it: MutableList<Province>) {
-        val adapter = CountryListAdapter(it, null)
+        val adapter = CountryListAdapter(dataSet = it, rowClicked = null, showFlags = false)
         binding.provinceListRecyclerview.layoutManager = LinearLayoutManager(context)
         binding.provinceListRecyclerview.adapter = adapter
         binding.progressBar.visibility = View.GONE
         binding.provinceListRecyclerview.visibility = View.VISIBLE
     }
-
-
 }
