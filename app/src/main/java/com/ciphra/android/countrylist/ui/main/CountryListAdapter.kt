@@ -12,7 +12,7 @@ import com.ciphra.android.countrylist.R
 import com.squareup.picasso.Picasso
 import org.apache.commons.lang3.text.WordUtils
 
-class CountryListAdapter(private val dataSet : List<Place>, val rowClicked : ((Int) -> (Unit))?, val showFlags : Boolean) : RecyclerView.Adapter<CountryListAdapter.ViewHolder>() {
+class CountryListAdapter(private val dataSet : List<Place>, val rowClicked : ((Int, String) -> (Unit))?, val showFlags : Boolean) : RecyclerView.Adapter<CountryListAdapter.ViewHolder>() {
     //I decided to make one adapter for both screens because the lists are so similar
     //the row clicked is nullable, if it is null onclick does nothing
     override fun onCreateViewHolder(
@@ -34,7 +34,7 @@ class CountryListAdapter(private val dataSet : List<Place>, val rowClicked : ((I
         val countryLabel = WordUtils.capitalizeFully(place.Name)
         holder.labelTextView.setText(countryLabel)
         if(rowClicked != null)holder.rowLayout.setOnClickListener {
-            rowClicked!!(dataSet[position].ID.toInt())
+            rowClicked!!(dataSet[position].ID.toInt(), countryLabel)
         }
         if(showFlags)Picasso.get().load("https://raw.githubusercontent.com/hjnilsson/country-flags/master/png250px/" + place.Code.toLowerCase() + ".png").into(holder.flagImageView)
         else holder.flagImageView.visibility = View.GONE

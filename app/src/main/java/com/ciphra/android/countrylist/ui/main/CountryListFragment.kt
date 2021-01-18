@@ -58,6 +58,7 @@ class CountryListFragment : Fragment() {
 
     private fun setupRecyclerView(it: MutableList<Country>) {
         val adapter = CountryListAdapter(dataSet = it, rowClicked = navigateToProvinces, showFlags = true)
+        requireActivity().setTitle(R.string.countries_of_the_world)
         binding.countryListRecyclerview.layoutManager = LinearLayoutManager(context)
         binding.countryListRecyclerview.adapter = adapter
         binding.progressBar.visibility = View.GONE
@@ -72,9 +73,10 @@ class CountryListFragment : Fragment() {
     }
 
     private val navigateToProvinces = {
-        id : Int ->
+        id : Int, country : String ->
         var bundle = Bundle()
         bundle.putInt("Id", id)
+        bundle.putString("Country", country)
         requireView().findNavController().navigate(R.id.action_countryListFragment_to_countryDetailsFragment, bundle)
     }
 

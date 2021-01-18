@@ -23,6 +23,8 @@ class CountryDetailsFragment : Fragment() {
     }
 
     val viewModel: CountryListViewModel by viewModel()
+    var countryId = -1
+    var countryLabel = ""
     private lateinit var binding : CountryDetailsFragmentBinding
 
     override fun onCreateView(
@@ -34,14 +36,28 @@ class CountryDetailsFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        val id = arguments?.get("Id") as Int
+        countryId = arguments?.get("Id") as Int
+        countryLabel = arguments?.get("Country") as String
         val provinceListObserver = Observer<MutableList<Province>>{
             if(it.isNotEmpty()) {
                 setupRecyclerView(it)
             }
+            else{
+                showEmptyProvinceMessage()
+            }
         }
+        requireActivity().title = countryLabel
         viewModel.provinceLiveData.observe(this, provinceListObserver)
-        viewModel.retrieveProvinceList(id)
+
+        val errorObserver = Observer<String>{
+            if(it.isNotEmpty()){
+                val errorMessage = requireContext().getString(viewModel.getErrorMessageForCode(it))
+                showErrorLayout(errorMessage)
+                binding.retryButton.setOnClickListener { retryProvinceFetch() }
+            }
+        }
+        viewModel.errorLiveData.observe(this, errorObserver)
+        viewModel.retrieveProvinceList(countryId)
     }
 
     private fun setupRecyclerView(it: MutableList<Province>) {
@@ -49,6 +65,38 @@ class CountryDetailsFragment : Fragment() {
         binding.provinceListRecyclerview.layoutManager = LinearLayoutManager(context)
         binding.provinceListRecyclerview.adapter = adapter
         binding.progressBar.visibility = View.GONE
+        binding.errorLayout.visibility = View.GONE
         binding.provinceListRecyclerview.visibility = View.VISIBLE
     }
+
+    private fun showProgressBar(){
+        binding.progressBar.visibility = View.VISIBLE
+        binding.errorLayout.visibility = View.GONE
+        binding.provinceListRecyclerview.visibility = View.GONE
+    }
+
+    private fun showErrorLayout(errorCode : String) {
+        setErrorVisibilities()
+        binding.errorTextview.setText(errorCode)
+
+    }
+
+    private fun setErrorVisibilities() {
+        binding.provinceListRecyclerview.visibility = View.GONE
+        binding.progressBar.visibility = View.GONE
+        binding.errorLayout.visibility = View.VISIBLE
+    }
+
+    fun retryProvinceFetch(){
+        showProgressBar()
+        viewModel.retrieveProvinceList(countryId)
+    }
+
+    fun showEmptyProvinceMessage(){
+        setErrorVisibilities()
+        binding.errorTextview.setText(requireContext().getString(R.string.no_provinces_message))
+        binding.retryButton.visibility = View.GONE
+    }
+
+
 }

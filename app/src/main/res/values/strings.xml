@@ -3,6 +3,8 @@
     <string name="web_service_failed">Error fetching data.  Please try again later.</string>
     <string name="unknown_error_occured">Unknown error occured.</string>
     <string name="internet_required">Internet connection required for this application.</string>
+    <string name="no_provinces_message">This country has no provinces.</string>
+    <string name="countries_of_the_world">Countries of the world</string>
     <string name="retry">Retry</string>
 
 </resources>
