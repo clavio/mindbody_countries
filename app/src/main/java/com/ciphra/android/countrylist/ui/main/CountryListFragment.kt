@@ -33,17 +33,27 @@ class CountryListFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
         val countryListObserver = Observer<MutableList<Country>>{
             if(it.isNotEmpty()) {
-                //TODO remove errors
                 setupRecyclerView(it)
             }
         }
         viewModel.countryListLiveData.observe(this, countryListObserver)
         val errorObserver = Observer<String>{
-            //TODO remove loading
-            //TODO remove List
-            //TODO show errors
+            if(it.isNotEmpty()){
+                val errorMessage = requireContext().getString(viewModel.getErrorMessageForCode(it))
+                showErrorLayout(errorMessage)
+                binding.retryButton.setOnClickListener { retryCountryFetch() }
+            }
         }
+        viewModel.errorLiveData.observe(this, errorObserver)
         viewModel.retrieveCountryList()
+    }
+
+    private fun showErrorLayout(errorCode : String) {
+        binding.countryListRecyclerview.visibility = View.GONE
+        binding.progressBar.visibility = View.GONE
+        binding.errorLayout.visibility = View.VISIBLE
+        binding.errorTextview.setText(errorCode)
+
     }
 
     private fun setupRecyclerView(it: MutableList<Country>) {
@@ -51,7 +61,14 @@ class CountryListFragment : Fragment() {
         binding.countryListRecyclerview.layoutManager = LinearLayoutManager(context)
         binding.countryListRecyclerview.adapter = adapter
         binding.progressBar.visibility = View.GONE
+        binding.errorLayout.visibility = View.GONE
         binding.countryListRecyclerview.visibility = View.VISIBLE
+    }
+
+    private fun showProgressBar(){
+        binding.progressBar.visibility = View.VISIBLE
+        binding.errorLayout.visibility = View.GONE
+        binding.countryListRecyclerview.visibility = View.GONE
     }
 
     private val navigateToProvinces = {
@@ -60,5 +77,11 @@ class CountryListFragment : Fragment() {
         bundle.putInt("Id", id)
         requireView().findNavController().navigate(R.id.action_countryListFragment_to_countryDetailsFragment, bundle)
     }
+
+    fun retryCountryFetch(){
+        showProgressBar()
+        viewModel.retrieveCountryList()
+    }
+
 
 }

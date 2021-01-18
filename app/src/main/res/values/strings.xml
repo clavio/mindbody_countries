@@ -1,4 +1,8 @@
 <resources>
     <string name="app_name">Country List</string>
-    <string name="web_service_failed">Fetching country list failed.  Server error.  Please try again later.</string>
+    <string name="web_service_failed">Error fetching data.  Please try again later.</string>
+    <string name="unknown_error_occured">Unknown error occured.</string>
+    <string name="internet_required">Internet connection required for this application.</string>
+    <string name="retry">Retry</string>
+
 </resources>
